@@ -1,13 +1,16 @@
 
+import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Lightbulb, Users, Map, BookOpen, Trophy, Zap } from "lucide-react";
+import { TangibleIdeasExpander } from "./TangibleIdeasExpander";
 
 const features = [
   {
     icon: Lightbulb,
     title: "Tangible Ideas Only",
     description: "Focus on physical products that can be built, tested, and brought to market - from gadgets to sustainable packaging.",
-    gradient: "from-electric-blue to-electric-purple"
+    gradient: "from-electric-blue to-electric-purple",
+    expandable: true
   },
   {
     icon: Users,
@@ -42,6 +45,14 @@ const features = [
 ];
 
 const Features = () => {
+  const [expanderOpen, setExpanderOpen] = useState(false);
+
+  const handleFeatureClick = (feature: typeof features[0]) => {
+    if (feature.expandable) {
+      setExpanderOpen(true);
+    }
+  };
+
   return (
     <section className="py-20 px-6 relative">
       {/* Background elements */}
@@ -65,8 +76,11 @@ const Features = () => {
             return (
               <Card
                 key={index}
-                className="glass-card p-8 hover-glow group transition-all duration-300 animate-fade-in"
+                className={`glass-card p-8 hover-glow group transition-all duration-300 animate-fade-in ${
+                  feature.expandable ? 'cursor-pointer' : ''
+                }`}
                 style={{ animationDelay: `${index * 0.1}s` }}
+                onClick={() => handleFeatureClick(feature)}
               >
                 <div className="space-y-6">
                   {/* Icon */}
@@ -78,6 +92,11 @@ const Features = () => {
                   <div className="space-y-3">
                     <h3 className="text-xl font-bold group-hover:text-electric-blue transition-colors">
                       {feature.title}
+                      {feature.expandable && (
+                        <span className="ml-2 text-sm text-electric-blue opacity-70">
+                          Click to explore →
+                        </span>
+                      )}
                     </h3>
                     <p className="text-muted-foreground leading-relaxed">
                       {feature.description}
@@ -107,6 +126,12 @@ const Features = () => {
           </div>
         </div>
       </div>
+
+      {/* Expandable Modal */}
+      <TangibleIdeasExpander 
+        isOpen={expanderOpen} 
+        onClose={() => setExpanderOpen(false)} 
+      />
     </section>
   );
 };
