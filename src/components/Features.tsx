@@ -1,55 +1,173 @@
 
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Lightbulb, Users, Map, BookOpen, Trophy, Zap } from "lucide-react";
 import { TangibleIdeasExpander } from "./TangibleIdeasExpander";
+import FeatureModal from "./FeatureModal";
 
 const features = [
   {
     icon: Lightbulb,
     title: "Tangible Ideas Only",
-    description: "Focus on physical products that can be built, tested, and brought to market - from gadgets to sustainable packaging.",
+    description:
+      "Focus on physical products that can be built, tested, and brought to market - from gadgets to sustainable packaging.",
     gradient: "from-electric-blue to-electric-purple",
-    expandable: true
+    expandable: true,
+    modalContent: null,
   },
   {
     icon: Users,
     title: "Smart Collaboration",
-    description: "AI-powered matching system connects you with makers, designers, and builders who complement your skills.",
-    gradient: "from-electric-purple to-electric-pink"
+    description:
+      "AI-powered matching system connects you with makers, designers, and builders who complement your skills.",
+    gradient: "from-electric-purple to-electric-pink",
+    expandable: true,
+    modalContent: (
+      <>
+        <p>
+          Our AI-powered collaboration tool connects users with complementary
+          skills, matched by intent, availability, skill, and locality.
+        </p>
+        <ol className="list-decimal pl-5 space-y-1">
+          <li>Fill out a project brief</li>
+          <li>Our AI finds gaps in skills</li>
+          <li>We recommend makers near you (or virtually)</li>
+          <li>Connect, share tasks, collaborate</li>
+        </ol>
+        <ul className="list-disc pl-5 space-y-1">
+          <li>Skill synergy</li>
+          <li>Real-time availability</li>
+          <li>Location-aware matching</li>
+          <li>Community-based ratings</li>
+        </ul>
+        <p className="italic">
+          "I met my co-builder here and now we’re launching our second
+          Kickstarter. I would’ve never found him on LinkedIn."
+        </p>
+        <div className="flex flex-col sm:flex-row gap-3 pt-2">
+          <Button className="btn-electric text-white">Start Your Collaboration Match</Button>
+          <Button variant="outline">View Community Projects</Button>
+        </div>
+      </>
+    ),
   },
   {
     icon: BookOpen,
     title: "Free Build Library",
-    description: "Access step-by-step guides, 3D models, vendor lists, and manufacturing resources crowdsourced by the community.",
-    gradient: "from-electric-green to-electric-blue"
+    description:
+      "Access step-by-step guides, 3D models, vendor lists, and manufacturing resources crowdsourced by the community.",
+    gradient: "from-electric-green to-electric-blue",
+    expandable: true,
+    modalContent: (
+      <>
+        <p>
+          Explore a growing library of open-source build guides, CAD files,
+          vendor links, and prototyping resources. Everything here is
+          community-contributed and verified.
+        </p>
+        <ul className="list-disc pl-5 space-y-1">
+          <li>3D files for components</li>
+          <li>Vendor list by geography</li>
+          <li>Material selection guides</li>
+          <li>Step-by-step build instructions</li>
+        </ul>
+        <p className="italic">Earn badges by submitting to the library.</p>
+        <div className="flex flex-col sm:flex-row gap-3 pt-2">
+          <Button className="btn-electric text-white">Browse the Library</Button>
+          <Button variant="outline">Submit a Build Guide</Button>
+        </div>
+      </>
+    ),
   },
   {
     icon: Map,
     title: "Local Maker Map",
-    description: "Find nearby maker spaces, 3D printing hubs, suppliers, and mentors to bring your ideas to life offline.",
-    gradient: "from-electric-pink to-electric-green"
+    description:
+      "Find nearby maker spaces, 3D printing hubs, suppliers, and mentors to bring your ideas to life offline.",
+    gradient: "from-electric-pink to-electric-green",
+    expandable: true,
+    modalContent: (
+      <>
+        <p>
+          Connect to your local ecosystem — from CNC shops to 3D print labs,
+          materials suppliers to mentor collectives.
+        </p>
+        <p>Enter your pin code and view mapped resources around you.</p>
+        <ul className="list-disc pl-5 space-y-1">
+          <li>Reduce build times by sourcing locally</li>
+          <li>Collaborate face-to-face</li>
+          <li>Discover workshops and maker fests</li>
+        </ul>
+        <div className="flex flex-col sm:flex-row gap-3 pt-2">
+          <Button className="btn-electric text-white">Explore Your Local Map</Button>
+          <Button variant="outline">Add a New Space</Button>
+        </div>
+      </>
+    ),
   },
   {
     icon: Zap,
     title: "Execution Dashboard",
-    description: "Track your progress from prototype to product with milestones, testing feedback, and collaboration tools.",
-    gradient: "from-electric-blue to-electric-green"
+    description:
+      "Track your progress from prototype to product with milestones, testing feedback, and collaboration tools.",
+    gradient: "from-electric-blue to-electric-green",
+    expandable: true,
+    modalContent: (
+      <>
+        <p>The Execution Dashboard keeps your build on track.</p>
+        <ul className="list-disc pl-5 space-y-1">
+          <li>Visual roadmap view</li>
+          <li>Shared task boards</li>
+          <li>Upload feedback from tests</li>
+          <li>Invite collaborators</li>
+        </ul>
+        <div className="flex flex-col sm:flex-row gap-3 pt-2">
+          <Button className="btn-electric text-white">Open Your Dashboard</Button>
+          <Button variant="outline">Create Your First Milestone</Button>
+        </div>
+      </>
+    ),
   },
   {
     icon: Trophy,
     title: "Gamified Community",
-    description: "Earn badges, build reputation, and showcase your expertise while helping others bring their ideas to life.",
-    gradient: "from-electric-purple to-electric-blue"
-  }
+    description:
+      "Earn badges, build reputation, and showcase your expertise while helping others bring their ideas to life.",
+    gradient: "from-electric-purple to-electric-blue",
+    expandable: true,
+    modalContent: (
+      <>
+        <p>
+          We reward participation, support, and contribution. Every time you
+          help another builder, share a design, or solve a question — you gain
+          XP, badges, and visibility.
+        </p>
+        <ul className="list-disc pl-5 space-y-1">
+          <li>Submitting a build guide = +50 XP</li>
+          <li>Commenting feedback = +10 XP</li>
+          <li>Being rated helpful = +25 XP</li>
+          <li>Hosting a build session = +100 XP</li>
+        </ul>
+        <div className="flex flex-col sm:flex-row gap-3 pt-2">
+          <Button className="btn-electric text-white">View Your XP</Button>
+          <Button variant="outline">Help Others Build</Button>
+        </div>
+      </>
+    ),
+  },
 ];
 
 const Features = () => {
   const [expanderOpen, setExpanderOpen] = useState(false);
+  const [modalFeature, setModalFeature] = useState<(typeof features)[0] | null>(null);
 
-  const handleFeatureClick = (feature: typeof features[0]) => {
-    if (feature.expandable) {
+  const handleFeatureClick = (feature: (typeof features)[0]) => {
+    if (!feature.expandable) return;
+    if (feature.title === "Tangible Ideas Only") {
       setExpanderOpen(true);
+    } else {
+      setModalFeature(feature);
     }
   };
 
@@ -128,9 +246,15 @@ const Features = () => {
       </div>
 
       {/* Expandable Modal */}
-      <TangibleIdeasExpander 
-        isOpen={expanderOpen} 
-        onClose={() => setExpanderOpen(false)} 
+      <TangibleIdeasExpander
+        isOpen={expanderOpen}
+        onClose={() => setExpanderOpen(false)}
+      />
+      <FeatureModal
+        isOpen={!!modalFeature}
+        onClose={() => setModalFeature(null)}
+        title={modalFeature?.title || ""}
+        content={modalFeature?.modalContent || null}
       />
     </section>
   );
