@@ -14,51 +14,57 @@ export async function uploadFile(file: File): Promise<string> {
   const { data, error } = await supabase.storage
     .from("idea-files")
     .upload(filePath, file);
-  if (error) throw error;
+  if (error) {
+    console.error("File upload failed", error);
+    throw new Error(error.message);
+  }
   return data.path;
 }
 
 export async function createIdea(form: NewIdea): Promise<Tables<"ideas">> {
-  const {
-    title,
-    description,
-    category,
-    tags,
-    file,
-  } = form;
+  const { title, description, category, tags, file } = form;
 
   if (!title || !description || !category) {
     throw new Error("Missing required fields");
   }
 
-  let image_url: string | null = null;
-  if (file) {
-    image_url = await uploadFile(file);
+  try {
+    let image_url: string | null = null;
+    if (file) {
+      image_url = await uploadFile(file);
+    }
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      throw new Error("User not authenticated");
+    }
+
+    const { data, error } = await supabase
+      .from("ideas")
+      .insert({
+        title,
+        description,
+        category,
+        tags,
+        image_url,
+        user_id: user.id,
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Error creating idea", error);
+      throw new Error(error.message);
+    }
+
+    return data;
+  } catch (err) {
+    console.error("createIdea failed", err);
+    throw err;
   }
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    throw new Error("User not authenticated");
-  }
-
-  const { data, error } = await supabase
-    .from("ideas")
-    .insert({
-      title,
-      description,
-      category,
-      tags,
-      image_url,
-      user_id: user.id,
-    })
-    .select()
-    .single();
-
-  if (error) throw error;
-  return data;
 }
 
 export async function fetchIdeas() {

@@ -34,13 +34,17 @@ interface FormValues {
   tags: string;
 }
 
-export default function IdeaSubmissionModal({ open, onOpenChange }: IdeaSubmissionModalProps) {
+export default function IdeaSubmissionModal({
+  open,
+  onOpenChange,
+}: IdeaSubmissionModalProps) {
   const navigate = useNavigate();
   const [file, setFile] = useState<File | null>(null);
   const {
     register,
     handleSubmit,
     setValue,
+    reset,
     formState: { errors },
   } = useForm<FormValues>();
 
@@ -57,6 +61,8 @@ export default function IdeaSubmissionModal({ open, onOpenChange }: IdeaSubmissi
         file,
       });
       toast("Idea submitted!");
+      reset();
+      setFile(null);
       onOpenChange(false);
       navigate(`/idea/${idea.id}`);
     } catch (err) {
@@ -82,7 +88,10 @@ export default function IdeaSubmissionModal({ open, onOpenChange }: IdeaSubmissi
           </div>
           <div className="space-y-2">
             <label className="text-sm font-medium">Short Description</label>
-            <Textarea rows={3} {...register("description", { required: true })} />
+            <Textarea
+              rows={3}
+              {...register("description", { required: true })}
+            />
           </div>
           <div className="space-y-2">
             <label className="text-sm font-medium">Category</label>
@@ -97,19 +106,25 @@ export default function IdeaSubmissionModal({ open, onOpenChange }: IdeaSubmissi
                 <SelectItem value="Sustainability">Sustainability</SelectItem>
               </SelectContent>
             </Select>
-            <input type="hidden" {...register("category", { required: true })} />
+            <input
+              type="hidden"
+              {...register("category", { required: true })}
+            />
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-medium">File Upload (optional)</label>
+            <label className="text-sm font-medium">
+              File Upload (optional)
+            </label>
             <Input
               type="file"
               onChange={(e) => setFile(e.target.files?.[0] ?? null)}
             />
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-medium">Tags (comma separated)</label>
-            <Input {...register("tags")}
-              placeholder="e.g. IoT, 3D Printing" />
+            <label className="text-sm font-medium">
+              Tags (comma separated)
+            </label>
+            <Input {...register("tags")} placeholder="e.g. IoT, 3D Printing" />
           </div>
           <DialogFooter>
             <Button type="submit" className="btn-electric text-white">
