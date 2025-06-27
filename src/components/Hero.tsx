@@ -1,8 +1,14 @@
 
 import { Button } from "@/components/ui/button";
 import { Plus, ArrowRight } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import IdeaSubmissionModal from "./IdeaSubmissionModal";
 
 const Hero = () => {
+  const [shareOpen, setShareOpen] = useState(false);
+  const navigate = useNavigate();
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background mesh gradient */}
@@ -33,18 +39,20 @@ const Hero = () => {
           
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
-            <Button 
-              size="lg" 
+            <Button
+              size="lg"
               className="btn-electric text-white px-8 py-4 text-lg font-semibold rounded-full group"
+              onClick={() => setShareOpen(true)}
             >
               <Plus className="w-5 h-5 mr-2 group-hover:rotate-90 transition-transform duration-300" />
               Share Your Idea
             </Button>
             
-            <Button 
-              variant="outline" 
-              size="lg" 
+            <Button
+              variant="outline"
+              size="lg"
               className="px-8 py-4 text-lg font-semibold rounded-full glass-card hover-glow group border-white/20"
+              onClick={() => navigate('/explore')}
             >
               Explore Ideas
               <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
@@ -80,6 +88,7 @@ const Hero = () => {
           </div>
         </div>
       </div>
+      <IdeaSubmissionModal open={shareOpen} onOpenChange={setShareOpen} />
     </section>
   );
 };
